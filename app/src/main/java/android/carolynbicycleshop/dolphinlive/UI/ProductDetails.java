@@ -71,8 +71,25 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProductDetails.this, PartDetails.class);
+                intent.putExtra("prodID",id);
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
+        final PartAdapter partAdapter = new PartAdapter(this);
+        recyclerView.setAdapter(partAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Part> filteredParts = new ArrayList<>();
+        for (Part p : repository.getAllParts()) {
+            if (p.getProductID() == id) filteredParts.add(p);
+        }
+        partAdapter.setParts(filteredParts);
+
+        //Toast.makeText(ProductDetails.this,"refresh list",Toast.LENGTH_LONG).show();
     }
 }
