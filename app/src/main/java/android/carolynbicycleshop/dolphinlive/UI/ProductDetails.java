@@ -10,9 +10,12 @@ import android.carolynbicycleshop.dolphinlive.entities.Part;
 import android.carolynbicycleshop.dolphinlive.entities.Product;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,6 +30,8 @@ public class ProductDetails extends AppCompatActivity {
     double price;
     int id;
     Product product;
+    Product currentProduct;
+    int numParts;
     Repository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class ProductDetails extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
     @Override
     protected void onResume() {
@@ -91,5 +97,32 @@ public class ProductDetails extends AppCompatActivity {
         partAdapter.setParts(filteredParts);
 
         //Toast.makeText(ProductDetails.this,"refresh list",Toast.LENGTH_LONG).show();
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.deletepart, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.deleteproduct:
+                for (Product prod : repository.getAllProducts()) {
+                    if (prod.getProductID() == id) currentProduct = prod;
+                }
+
+                numParts = 0;
+                for (Part part : repository.getAllParts()) {
+                    if (part.getProductID() == id) ++numParts;
+                }
+
+                if (numParts == 0) {
+                    repository.delete(currentProduct);
+                    Toast.makeText(ProductDetails.this, currentProduct.getProductName() + " was deleted", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(ProductDetails.this, "Can't delete a product with parts", Toast.LENGTH_LONG).show();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

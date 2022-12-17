@@ -4,11 +4,11 @@
 
     <item
         android:id="@+id/share"
-        android:title="Share" />
+        android:title="@string/share" />
     <item
         android:id="@+id/notifystart"
-        android:title="Notify Start" />
+        android:title="@string/notify_start" />
     <item
         android:id="@+id/notifyend"
-        android:title="Notify End" />
+        android:title="@string/notify_end" />
 </menu>
